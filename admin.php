@@ -260,7 +260,55 @@ $usuarios = $conn->query("SELECT id, nome, email, tipo FROM usuarios ORDER BY id
     </div>
 
 </div>
+<?php
+// ... todo o teu código PHP e HTML do index.php continua igual acima ...
 
+// Lógica para definir a música com base na categoria filtrada
+$musica_fundo = "music/Wii plaza.mp3"; // Música padrão (Mii Plaza)
+
+if (isset($_GET['categoria'])) {
+    $cat_id = intval($_GET['categoria']);
+    
+    // Substitui pelos IDs reais das tuas categorias no banco de dados
+    if ($cat_id == 1) { 
+        $musica_fundo = "music/yugioh battle.mp3";
+    } elseif ($cat_id == 2) { 
+        $musica_fundo = "music/Wild battle.mp3";
+    }
+}
+?>
+
+<!-- Elemento de Áudio e Botão Flutuante -->
+<audio id="bg-music" loop>
+    <source src="<?php echo $musica_fundo; ?>" type="audio/mpeg">
+</audio>
+
+<button id="btn-audio" onclick="toggleAudio()" class="btn btn-warning rounded-circle shadow position-fixed bottom-0 end-0 m-4" style="z-index: 1000; width: 50px; height: 50px;">
+    <i id="icon-audio" class="bi bi-volume-mute-fill fs-5"></i>
+</button>
+
+<script>
+    const audio = document.getElementById('bg-music');
+    const icon = document.getElementById('icon-audio');
+
+    // Ativa o áudio ao primeiro clique do utilizador na página
+    document.addEventListener('click', function startAudio() {
+        audio.play().then(() => {
+            icon.className = 'bi bi-volume-up-fill fs-5';
+        }).catch(() => {});
+        document.removeEventListener('click', startAudio);
+    });
+
+    function toggleAudio() {
+        if (audio.paused) {
+            audio.play();
+            icon.className = 'bi bi-volume-up-fill fs-5';
+        } else {
+            audio.pause();
+            icon.className = 'bi bi-volume-mute-fill fs-5';
+        }
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
